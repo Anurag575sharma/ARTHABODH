@@ -17,7 +17,7 @@ import Last30DaysExpenses from "../../components/Dashboard/Last30DaysExpenses";
 import RecentIncomeWithChart from "../../components/Dashboard/RecentIncomeWithChart";
 import RecentIncome from "../../components/Dashboard/RecentIncome";
 
-const None = () => {
+const Home = () => {
   useUserAuth();
   const navigate = useNavigate();
 
@@ -35,6 +35,7 @@ const None = () => {
       );
       if (response.data) {
         setDashboardData(response.data);
+        console.log(response.data);
       }
     } catch (error) {
       console.log("Something went wrong. Please try again:", error);
@@ -49,28 +50,35 @@ const None = () => {
   }, []);
 
   return (
-    <DashboardLayout activeMenu="dashboard">
+    <DashboardLayout activeMenu="Dashboard">
       <div className="my-5 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <InfoCard
             icon={<IoMdCard />}
             label="Total Balance"
-            value={addThousandsSeparator(dashboardData?.totalBalance || 0)}
+            value={addThousandsSeparator(
+              Number((dashboardData?.totalBalance || 0).toFixed(2))
+            )}
             color="bg-primary"
           />
           <InfoCard
             icon={<LuWalletMinimal />}
             label="Total Income"
-            value={addThousandsSeparator(dashboardData?.totalIncome || 0)}
+            value={addThousandsSeparator(
+              Number((dashboardData?.totalIncome || 0).toFixed(2))
+            )}
             color="bg-orange-500"
           />
           <InfoCard
             icon={<LuHandCoins />}
             label="Total Expense"
-            value={addThousandsSeparator(dashboardData?.totalExpenses || 0)}
+            value={addThousandsSeparator(
+              Number((dashboardData?.totalExpenses || 0).toFixed(2))
+            )}
             color="bg-red-500"
           />
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           <RecentTransactions
             transactions={dashboardData?.recentTransactions}
@@ -78,9 +86,11 @@ const None = () => {
           />
 
           <FinanceOverview
-            totalBalance={dashboardData?.totalBalance || 0}
-            totalIncome={dashboardData?.totalIncome || 0}
-            totalExpense={dashboardData?.totalExpenses || 0}
+            totalBalance={Number((dashboardData?.totalBalance || 0).toFixed(2))}
+            totalIncome={Number((dashboardData?.totalIncome || 0).toFixed(2))}
+            totalExpense={Number(
+              (dashboardData?.totalExpenses || 0).toFixed(2)
+            )}
           />
 
           <ExpenseTransactions
@@ -96,7 +106,7 @@ const None = () => {
             data={
               dashboardData?.last60DaysIncome?.transactions?.slice(0, 4) || []
             }
-            totalIncome={dashboardData?.totalIncome || 0}
+            totalIncome={Number((dashboardData?.totalIncome || 0).toFixed(2))}
           />
 
           <RecentIncome
@@ -109,4 +119,4 @@ const None = () => {
   );
 };
 
-export default None;
+export default Home;

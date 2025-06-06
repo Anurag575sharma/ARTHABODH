@@ -42,6 +42,7 @@ exports.addIncome = async (req, res) => {
     if (isNaN(amount)) {
       return res.status(400).json({message: "Amount must be a valid number"});
     }
+    amount = Math.round(amount * 100) / 100;
 
     const newIncome = new Income({
       userId,
@@ -88,7 +89,8 @@ exports.downloadIncomeExcel = async (req, res) => {
   try {
     const income = await Income.find({userId}).sort({date: -1});
 
-    // Prepare data for Excel
+    item.amount = Number(item.amount.toFixed(2)); // round it
+
     const data = income.map((item) => ({
       Source: item.source,
       Amount: item.amount,
